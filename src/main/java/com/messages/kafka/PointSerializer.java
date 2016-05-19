@@ -1,11 +1,11 @@
 package com.messages.kafka;
 
+import java.nio.ByteBuffer;
 import java.util.Map;
 
 import org.apache.kafka.common.serialization.Serializer;
 
 import com.messages.core.Point;
-import com.sun.xml.internal.messaging.saaj.util.ByteOutputStream;
 
 
 public class PointSerializer implements Serializer<Point> {
@@ -16,12 +16,10 @@ public class PointSerializer implements Serializer<Point> {
 
   @Override
   public byte[] serialize(String s, Point point) {
-    ByteOutputStream output = new ByteOutputStream();
-    output.write(point.getX());
-    output.write(point.getY());
-    byte[] bytes = output.getBytes();
-    output.close();
-    return bytes;
+    return ByteBuffer.allocate(Integer.BYTES*2)
+      .putInt(point.getX())
+      .putInt(point.getY())
+      .array();
   }
 
   @Override
