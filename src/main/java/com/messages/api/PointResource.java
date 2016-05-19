@@ -11,6 +11,7 @@ import javax.ws.rs.core.MediaType;
 
 import com.messages.core.Point;
 import com.messages.db.PointDAO;
+import com.messages.kafka.PointProducer;
 
 @Path("/points")
 @Produces(MediaType.APPLICATION_JSON)
@@ -18,9 +19,11 @@ import com.messages.db.PointDAO;
 public class PointResource {
 
   private final PointDAO dao;
+  private final PointProducer producer;
 
-  public PointResource(PointDAO dao) {
+  public PointResource(PointDAO dao, PointProducer pointProducer) {
     this.dao = dao;
+    this.producer = pointProducer;
     dao.createPointTableIfNotExists();
   }
 
@@ -30,9 +33,8 @@ public class PointResource {
   }
 
   @POST
-  public long create(Point point) {
-    long id = dao.insert(point.getX(), point.getY());
-    return id;
+  public void create(Point point) {
+    producer.addNewPoint(point);
   }
 
 }
