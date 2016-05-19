@@ -4,8 +4,10 @@ import com.messages.core.Point;
 
 public class PointDBConsumer extends PointKafkaConsumer {
 
+  private static final String DB_GROUP = "dbgroup";
+
   public PointDBConsumer(int id) {
-    super(id);
+    super(id, DB_GROUP);
   }
 
   @Override

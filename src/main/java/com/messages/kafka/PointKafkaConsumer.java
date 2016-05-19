@@ -1,5 +1,6 @@
 package com.messages.kafka;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -7,6 +8,8 @@ import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.common.errors.WakeupException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.ImmutableList;
 import com.messages.core.Point;
@@ -16,12 +19,18 @@ import com.messages.util.ConfigUtil;
 public abstract class PointKafkaConsumer implements Runnable {
 
   private static final String POINTS_TOPIC = "points";
-  private final KafkaConsumer<String, Point> consumer;
+  private KafkaConsumer<String, Point> consumer;
   private final int id;
 
-  public PointKafkaConsumer(int id) {
+  Logger logger = LoggerFactory.getLogger(PointKafkaConsumer.class);
+
+  public PointKafkaConsumer(int id, String groupId) {
     this.id = id;
-    consumer = new KafkaConsumer<String, Point>(ConfigUtil.getKafkaProperties());
+    try {
+      consumer = new KafkaConsumer<String, Point>(ConfigUtil.getKafkaProperties(groupId));
+    } catch (IOException e) {
+      consumer = null; // No point in having an ill configured consumer - fail fast
+    }
   }
 
   @Override

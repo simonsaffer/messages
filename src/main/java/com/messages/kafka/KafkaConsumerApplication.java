@@ -1,7 +1,6 @@
 package com.messages.kafka;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -12,8 +11,6 @@ public class KafkaConsumerApplication {
 
   public static void main(String[] args) {
     int numConsumers = 3;
-    String groupId = "pointgroup";
-    List<String> topics = Arrays.asList(TOPIC);
     ExecutorService executor = Executors.newFixedThreadPool(numConsumers);
 
     final List<PointKafkaConsumer> consumers = new ArrayList<>();

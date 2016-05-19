@@ -1,6 +1,5 @@
 package com.messages.kafka;
 
-import java.util.Optional;
 import java.util.Properties;
 
 import org.apache.kafka.clients.producer.KafkaProducer;
@@ -27,13 +26,8 @@ public class PointProducer implements Managed {
 
   @Override
   public void start() throws Exception {
-    Optional<Properties> properties = ConfigUtil.readPropertiesFile(ConfigUtil.KAFKA_PROPERTIES);
-
-    properties.ifPresent(props -> producer = new KafkaProducer(props));
-
-    if(!properties.isPresent()) {
-      logger.error("Failed to start producer");
-    }
+    Properties properties = ConfigUtil.readPropertiesFile(ConfigUtil.KAFKA_PROPERTIES);
+    producer = new KafkaProducer(properties);
   }
 
   @Override
