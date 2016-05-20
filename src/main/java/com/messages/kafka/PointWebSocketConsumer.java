@@ -6,10 +6,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import javax.websocket.RemoteEndpoint;
 import javax.websocket.Session;
 
-import org.eclipse.jetty.server.Server;
-import org.eclipse.jetty.websocket.server.WebSocketHandler;
-import org.eclipse.jetty.websocket.servlet.WebSocketServletFactory;
-
 import com.messages.core.Point;
 
 public class PointWebSocketConsumer extends PointKafkaConsumer {
@@ -20,20 +16,6 @@ public class PointWebSocketConsumer extends PointKafkaConsumer {
 
   public PointWebSocketConsumer(int id) {
     super(id, WEB_SOCKET_GROUP);
-    try {
-      Server server = new Server(8080);
-      WebSocketHandler wsHandler = new WebSocketHandler() {
-        @Override
-        public void configure(WebSocketServletFactory factory) {
-          factory.register(WebSocketHandler.class);
-        }
-      };
-      server.setHandler(wsHandler);
-      server.start();
-      server.join();
-    } catch (Exception e) {
-
-    }
   }
 
   public static void addRemote(Session session) {

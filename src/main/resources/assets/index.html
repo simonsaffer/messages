@@ -4,17 +4,24 @@
   <script>
     var ws = new WebSocket("ws://127.0.0.1:8080/application/pointws");
 
-    ws.onopen = function() {
-      alert("Opened!");
-      ws.send("Hello Server");
-    };
+    var points = []
 
     ws.onmessage = function (evt) {
-      alert("Message: " + evt.data);
-    };
+      var point = JSON.parse(evt.data);
+      points.push(point);
+      var c = document.getElementById("pointCanvas");
+      var ctx = c.getContext("2d");
+      ctx.beginPath();
+      ctx.arc(point.x,point.y,5,0,2*Math.PI);
+      ctx.stroke();
 
-    ws.onclose = function() {
-      alert("Closed!");
+      points.forEach(
+        function(otherPoint, index) {
+          ctx.moveTo(otherPoint.x, otherPoint.y);
+          ctx.lineTo(point.x, point.y);
+          ctx.stroke();
+        }
+      )
     };
 
     ws.onerror = function(err) {
@@ -24,5 +31,7 @@
 </head>
 <body>
 <h1>WebSocket test</h1>
+<canvas id="pointCanvas" width="800" height="600" style="border:1px solid #000000;">
+</canvas>
 </body>
 </html>
