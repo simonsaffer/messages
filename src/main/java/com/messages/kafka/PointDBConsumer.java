@@ -1,17 +1,21 @@
 package com.messages.kafka;
 
 import com.messages.core.Point;
+import com.messages.db.PointDAO;
 
 public class PointDBConsumer extends PointKafkaConsumer {
 
   private static final String DB_GROUP = "dbgroup";
 
-  public PointDBConsumer(int id) {
+  private final PointDAO pointDAO;
+
+  public PointDBConsumer(int id, PointDAO pointDAO) {
     super(id, DB_GROUP);
+    this.pointDAO = pointDAO;
   }
 
   @Override
   protected void process(Point point) {
-    System.out.println("Yeah! " + point);
+    pointDAO.insert(point.getX(), point.getY());
   }
 }

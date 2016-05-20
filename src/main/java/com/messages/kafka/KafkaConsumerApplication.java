@@ -6,10 +6,18 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
+import com.messages.db.PointDAO;
+
 import io.dropwizard.lifecycle.Managed;
 
 public class KafkaConsumerApplication implements Managed {
   private static final String TOPIC = "points";
+
+  private final PointDAO pointDAO;
+
+  public KafkaConsumerApplication(PointDAO dao) {
+    this.pointDAO = dao;
+  }
 
   @Override
   public void start() {
@@ -19,7 +27,7 @@ public class KafkaConsumerApplication implements Managed {
     final List<PointKafkaConsumer> consumers = new ArrayList<>();
     for (int i = 0; i < numConsumers; i++) {
       PointKafkaConsumer consumer;
-      if (i % 2 == 0) consumer = new PointDBConsumer(i);
+      if (i % 2 == 0) consumer = new PointDBConsumer(i, pointDAO);
       else consumer = new PointWebSocketConsumer(i);
       consumers.add(consumer);
       executor.submit(consumer);

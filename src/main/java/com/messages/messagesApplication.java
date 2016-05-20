@@ -49,7 +49,7 @@ public class MessagesApplication extends Application<MessagesConfiguration> {
 
     // Kafka
     environment.lifecycle().manage(pointProducer);
-    KafkaConsumerApplication consumerApplication = new KafkaConsumerApplication();
+    KafkaConsumerApplication consumerApplication = new KafkaConsumerApplication(dao);
     environment.lifecycle().manage(consumerApplication);
 
     // Websocket
