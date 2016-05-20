@@ -6,10 +6,13 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-public class KafkaConsumerApplication {
+import io.dropwizard.lifecycle.Managed;
+
+public class KafkaConsumerApplication implements Managed {
   private static final String TOPIC = "points";
 
-  public static void main(String[] args) {
+  @Override
+  public void start() {
     int numConsumers = 3;
     ExecutorService executor = Executors.newFixedThreadPool(numConsumers);
 
@@ -36,5 +39,10 @@ public class KafkaConsumerApplication {
         }
       }
     });
+  }
+
+  @Override
+  public void stop() throws Exception {
+
   }
 }
