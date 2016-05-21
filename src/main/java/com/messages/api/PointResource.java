@@ -2,6 +2,7 @@ package com.messages.api;
 
 import java.util.List;
 
+import javax.validation.constraints.NotNull;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -33,7 +34,7 @@ public class PointResource {
   }
 
   @POST
-  public void create(Point point) {
+  public void create(@NotNull Point point) {
     producer.addNewPoint(point);
   }
 
